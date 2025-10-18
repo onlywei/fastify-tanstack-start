@@ -3,7 +3,7 @@ import type { FastifyContentTypeParser, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { toNodeHandler } from 'srvx/node';
 
-export interface FastifyTanstackStartOptions {
+export interface FastifyTanstackStartProductionOptions {
 	/**
 	 * Base path for the app (e.g., '/app' or '/my/special-path')
 	 * @default '/'
@@ -23,7 +23,7 @@ export interface FastifyTanstackStartOptions {
 	builtClientAssetsDir?: string;
 }
 
-const tanstackStartProduction: FastifyPluginAsync<FastifyTanstackStartOptions> = async (
+const tanstackStartProduction: FastifyPluginAsync<FastifyTanstackStartProductionOptions> = async (
 	fastify,
 	options,
 ) => {
