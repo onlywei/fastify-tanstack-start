@@ -1,80 +1,68 @@
 # fastify-tanstack-start
 
-Convenience plugin to serve [Tanstack Start](https://tanstack.com/start) apps on a Fastify server.
+Monorepo for Fastify plugins to serve [TanStack Start](https://tanstack.com/start) applications.
 
-## Why?
+## 📦 Package
 
-While Tanstack Start uses `vite` as a development server for local development, Tanstack Start is relatively unopinionated when it comes to how it is hosted or served in production. Running `vite build` in a Tanstack Start app produces a server module that needs to be connected to some sort of production server. There are a lot of choices to choose from for the production server - and one of them is Fastify!
+This repository contains the [`fastify-tanstack-start`](./packages/fastify-tanstack-start) package - a convenient Fastify plugin that allows you to serve TanStack Start applications in both development and production modes.
 
-## Installation
+**👉 [View full documentation and usage instructions](./packages/fastify-tanstack-start/README.md)**
+
+## 🚀 Quick Links
+
+- **NPM Package**: [fastify-tanstack-start](https://www.npmjs.com/package/fastify-tanstack-start) _(when published)_
+- **Package Source**: [`packages/fastify-tanstack-start`](./packages/fastify-tanstack-start)
+- **Examples**: [`examples/`](./examples)
+
+## 📚 Examples
+
+This repository includes working examples demonstrating how to use the plugin:
+
+- [`production-only`](./examples/production-only) - Uses Vite for dev, Fastify for production only
+- [`dev-and-prod`](./examples/dev-and-prod) - Uses Fastify for both development and production
+
+## 🛠️ Development
+
+This is a pnpm workspace. To work on this repository:
+
 ```bash
-npm install fastify-tanstack-start
+# Install all dependencies
+pnpm install
+
+# Build the plugin package
+pnpm build
+
+# Format code
+pnpm format
+
+# Check formatting
+pnpm check-format
+
+# Clean all build artifacts and node_modules
+pnpm clean
 ```
 
-## Usage
+### Working on the Plugin
 
-### Production Server Only
+The main plugin code is in [`packages/fastify-tanstack-start/src`](./packages/fastify-tanstack-start/src):
+- `prod-plugin.ts` - Production mode plugin
+- `dev-plugin.ts` - Development mode plugin  
+- `index.ts` - Main exports
 
-In this mode, you will continue to use `vite dev` to run your Tanstack Start application in development. You will only use Fastify in production mode to serve the files that were built using `vite build`. This will not only serve the static client assets, but will also connect all the Tanstack Start server functions to the Fastify server.
+### Testing Changes
 
-```ts
-// fastify-server.ts
-import Fastify from 'fastify';
-import { tanstackStartProduction } from 'fastify-tanstack-start';
+Use the example apps to test your changes:
 
-const fastify = Fastify({/* options */});
+```bash
+# Terminal 1: Build the plugin in watch mode
+cd packages/fastify-tanstack-start
+pnpm dev
 
-// Register the plugin 
-fastify.register(tanstackStartProduction, {
-	basePath: '/your/app', // must match the "base" config in your vite config
-	builtServerModule: './dist/server/server.js', // module produced by "vite build"
-	builtClientAssetsDir: './dist/client/assets',
-});
-
-try {
-	await fastify.listen({ /* options */});
-} catch (err) {
-	fastify.log.error(err);
-	process.exit(1);
-}
-
+# Terminal 2: Run an example
+cd examples/dev-and-prod
+pnpm dev
 ```
 
-Be sure to inspect your `dist/` directory after running `vite build` to get the correct values for the `builtServerModule` and `builtClientAssetsDir` paths.
+## 📄 License
 
-After that, you should be able run the following to start your application in production mode:
-
-```
-vite build
-node fastify-server.ts
-```
-
-### Development Server
-
-If you want to use Fastify in development mode in addition to production mode, this package exposes a second Fastify plugin to help you do that. Doing so is completely optional; you may only want to do so if you want to write some application endpoints using Fastify instead of Tanstack Start.
-
-```ts
-// fastify-server.ts
-import Fastify from 'fastify';
-import { tanstackStartDevServer, tanstackStartProduction } from 'fastify-tanstack-start';
-
-const fastify = Fastify({/* options */});
-
-// You decide how you want to determine development mode vs production mode.
-// It can be an environment variable, a CLI argument, or whatever you want.
-if (DEVELOPMENT) {
-	fastify.register(tanstackStartDevServer, {
-		// options
-	});
-} else {
-	// Now use the production mode plugin, see above for details
-	fastify.register(tanstackStartProduction, {/* options */});
-}
-
-try {
-	await fastify.listen({ /* options */});
-} catch (err) {
-	fastify.log.error(err);
-	process.exit(1);
-}
-```
+MIT © Wei Wang
