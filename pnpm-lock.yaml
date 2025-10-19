@@ -137,6 +137,9 @@ importers:
         specifier: ^0.8.16
         version: 0.8.16
     devDependencies:
+      '@types/connect':
+        specifier: ^3.4.38
+        version: 3.4.38
       '@types/node':
         specifier: 'catalog:'
         version: 24.8.1
@@ -823,6 +826,9 @@ packages:
 
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
+
+  '@types/connect@3.4.38':
+    resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
@@ -2443,6 +2449,10 @@ snapshots:
   '@types/babel__traverse@7.28.0':
     dependencies:
       '@babel/types': 7.28.4
+
+  '@types/connect@3.4.38':
+    dependencies:
+      '@types/node': 24.8.1
 
   '@types/estree@1.0.8': {}
 

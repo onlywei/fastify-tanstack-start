@@ -4,7 +4,7 @@
   "description": "Convenience plugin to serve Tanstack Start apps on a Fastify server",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-	"type": "module",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -31,6 +31,7 @@
     "srvx": "^0.8.16"
   },
   "devDependencies": {
+    "@types/connect": "^3.4.38",
     "@types/node": "catalog:",
     "fastify": "catalog:",
     "typescript": "catalog:",
