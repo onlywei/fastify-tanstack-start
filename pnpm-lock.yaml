@@ -30,10 +30,10 @@ importers:
         specifier: ^1.56.1
         version: 1.56.1
       '@types/node':
-        specifier: ^24.7.2
+        specifier: 'catalog:'
         version: 24.8.1
       typescript:
-        specifier: ^5.9.3
+        specifier: 'catalog:'
         version: 5.9.3
 
   examples/dev-and-prod:
