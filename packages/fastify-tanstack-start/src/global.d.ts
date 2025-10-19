@@ -1,9 +1,22 @@
-// This file forces TypeScript to load @fastify/middie type augmentations
-// in all compilation contexts (local dev, CI, etc.)
+// This file manually declares the @fastify/middie type augmentation
+// because TypeScript is not consistently loading it from the package itself,
+// especially in CI environments with pnpm workspaces (hoist: false).
 //
-// Without this explicit import, TypeScript may not consistently load the
-// module augmentation that adds the .use() method to FastifyInstance,
-// especially when using moduleResolution: "NodeNext"
-//
-// See: https://github.com/fastify/middie#typescript-support
-import '@fastify/middie';
+// This is based on @fastify/middie's type definitions:
+// https://github.com/fastify/middie/blob/main/types/index.d.ts
+
+import type { IncomingMessage, ServerResponse } from 'node:http';
+
+declare module 'fastify' {
+	interface FastifyInstance {
+		use(fn: (req: IncomingMessage, res: ServerResponse, next: (err?: Error) => void) => void): this;
+		use(
+			route: string,
+			fn: (req: IncomingMessage, res: ServerResponse, next: (err?: Error) => void) => void,
+		): this;
+		use(
+			routes: string[],
+			fn: (req: IncomingMessage, res: ServerResponse, next: (err?: Error) => void) => void,
+		): this;
+	}
+}
