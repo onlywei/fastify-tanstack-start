@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { ServerInstance } from './test-helpers.ts';
-import { startServer, waitForLogMessage, waitForServer } from './test-helpers.ts';
+import { startServer, waitForServer } from './test-helpers.ts';
 
 test.describe('dev-and-prod example', () => {
 	test('dev mode - button click logs to server', async ({ page }) => {
@@ -24,10 +24,10 @@ test.describe('dev-and-prod example', () => {
 			await expect(button).toBeVisible();
 			await button.click();
 
-			// Wait for the log message to appear in server logs
-			const logFound = await waitForLogMessage(server.logs, 'Something was logged', 10000);
-
-			expect(logFound).toBe(true);
+			// Verify server response appears on the page
+			const serverResponse = page.getByTestId('server-response');
+			await expect(serverResponse).toBeVisible();
+			await expect(serverResponse).toContainText('Server function executed!');
 
 			// Test navigation to second route
 			const secondRouteLink = page.getByRole('link', { name: 'Go to Second Route' });
@@ -49,9 +49,7 @@ test.describe('dev-and-prod example', () => {
 		} finally {
 			// Cleanup: kill the server
 			if (server) {
-				server.kill();
-				// Give it a moment to cleanup
-				await new Promise((resolve) => setTimeout(resolve, 1000));
+				await server.kill();
 			}
 		}
 	});
@@ -77,10 +75,10 @@ test.describe('dev-and-prod example', () => {
 			await expect(button).toBeVisible();
 			await button.click();
 
-			// Wait for the log message to appear in server logs
-			const logFound = await waitForLogMessage(server.logs, 'Something was logged', 10000);
-
-			expect(logFound).toBe(true);
+			// Verify server response appears on the page
+			const serverResponse = page.getByTestId('server-response');
+			await expect(serverResponse).toBeVisible();
+			await expect(serverResponse).toContainText('Server function executed!');
 
 			// Test navigation to second route
 			const secondRouteLink = page.getByRole('link', { name: 'Go to Second Route' });
@@ -102,9 +100,7 @@ test.describe('dev-and-prod example', () => {
 		} finally {
 			// Cleanup: kill the server
 			if (server) {
-				server.kill();
-				// Give it a moment to cleanup
-				await new Promise((resolve) => setTimeout(resolve, 1000));
+				await server.kill();
 			}
 		}
 	});

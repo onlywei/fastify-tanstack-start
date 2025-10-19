@@ -3,33 +3,16 @@ import { resolve } from 'node:path';
 
 export interface ServerInstance {
 	process: ChildProcess;
-	logs: string[];
-	kill: () => void;
+	kill: () => Promise<void>;
 }
 
 /**
- * Start a server process and capture its output
+ * Start a server process
  */
 export function startServer(command: string, args: string[], cwd: string): ServerInstance {
-	const logs: string[] = [];
-
 	const serverProcess = spawn(command, args, {
 		cwd: resolve(process.cwd(), cwd),
 		env: { ...process.env },
-	});
-
-	serverProcess.stdout?.on('data', (data) => {
-		const output = data.toString();
-		logs.push(output);
-		// Optional: uncomment to see server output during tests
-		// console.log('[SERVER]', output);
-	});
-
-	serverProcess.stderr?.on('data', (data) => {
-		const output = data.toString();
-		logs.push(output);
-		// Optional: uncomment to see server errors during tests
-		// console.error('[SERVER ERROR]', output);
 	});
 
 	serverProcess.on('error', (error) => {
@@ -37,20 +20,34 @@ export function startServer(command: string, args: string[], cwd: string): Serve
 	});
 
 	const kill = () => {
-		if (!serverProcess.killed) {
+		return new Promise<void>((resolve) => {
+			if (serverProcess.killed || serverProcess.exitCode !== null) {
+				resolve();
+				return;
+			}
+
+			// Set up exit handler
+			const onExit = () => {
+				clearTimeout(forceKillTimeout);
+				resolve();
+			};
+
+			serverProcess.once('exit', onExit);
+
+			// Try graceful shutdown first
 			serverProcess.kill('SIGTERM');
-			// Force kill after 5 seconds if still running
-			setTimeout(() => {
-				if (!serverProcess.killed) {
+
+			// Force kill after 3 seconds if still running
+			const forceKillTimeout = setTimeout(() => {
+				if (!serverProcess.killed && serverProcess.exitCode === null) {
 					serverProcess.kill('SIGKILL');
 				}
-			}, 5000);
-		}
+			}, 3000);
+		});
 	};
 
 	return {
 		process: serverProcess,
-		logs,
 		kill,
 	};
 }
@@ -77,32 +74,4 @@ export async function waitForServer(url: string, timeoutMs = 30000): Promise<voi
 	}
 
 	throw new Error(`Server at ${url} did not become ready within ${timeoutMs}ms`);
-}
-
-/**
- * Check if a log message appears in the server logs
- */
-export function hasLogMessage(logs: string[], message: string): boolean {
-	return logs.some((log) => log.includes(message));
-}
-
-/**
- * Wait for a log message to appear (with timeout)
- */
-export async function waitForLogMessage(
-	logs: string[],
-	message: string,
-	timeoutMs = 5000,
-): Promise<boolean> {
-	const startTime = Date.now();
-
-	while (Date.now() - startTime < timeoutMs) {
-		if (hasLogMessage(logs, message)) {
-			return true;
-		}
-		// Wait 50ms before checking again
-		await new Promise((resolve) => setTimeout(resolve, 50));
-	}
-
-	return false;
 }
