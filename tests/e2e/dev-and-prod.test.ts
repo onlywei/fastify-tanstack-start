@@ -60,28 +60,6 @@ test.describe('dev-and-prod example', () => {
 		let server: ServerInstance | null = null;
 
 		try {
-			// Build the app first (this will take some time)
-			console.log('Building production app...');
-			const buildProcess = startServer('pnpm', ['build'], 'examples/dev-and-prod');
-
-			// Wait for build to complete by checking if process exits
-			await new Promise<void>((resolve, reject) => {
-				const timeout = setTimeout(() => {
-					buildProcess.kill();
-					reject(new Error('Build timed out after 60 seconds'));
-				}, 60000);
-
-				buildProcess.process.on('exit', (code) => {
-					clearTimeout(timeout);
-					if (code === 0) {
-						console.log('Build completed successfully');
-						resolve();
-					} else {
-						reject(new Error(`Build failed with exit code ${code}`));
-					}
-				});
-			});
-
 			// Start the production Fastify server
 			server = startServer('node', ['fastify-server.ts'], 'examples/dev-and-prod');
 
