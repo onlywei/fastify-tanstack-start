@@ -33,6 +33,36 @@ jobs:
       - name: Setup pnpm Environment
         uses: ./.github/actions/setup-pnpm
 
+      - name: Debug - Check dependency resolution
+        run: |
+          echo "=== Checking fastify-tanstack-start dependencies ==="
+          cd packages/fastify-tanstack-start
+          echo "--- Installed packages (depth 0) ---"
+          pnpm list --depth 0
+          echo ""
+          echo "--- @fastify/middie location ---"
+          ls -la node_modules/@fastify/ || echo "No local @fastify directory"
+          echo ""
+          echo "--- Checking if @fastify/middie types exist ---"
+          if [ -L "node_modules/@fastify/middie" ]; then
+            echo "@fastify/middie is a symlink to:"
+            readlink -f node_modules/@fastify/middie
+            echo "Contents of target:"
+            ls -la "$(readlink -f node_modules/@fastify/middie)"
+            echo ""
+            echo "Types directory:"
+            ls -la "$(readlink -f node_modules/@fastify/middie)/types" || echo "No types directory"
+          fi
+          echo ""
+          echo "--- TypeScript version ---"
+          pnpm exec tsc --version
+          echo ""
+          echo "--- tsconfig.json ---"
+          cat tsconfig.json
+
+      - name: Build packages and examples
+        run: pnpm -r build
+
       - name: Get Playwright version
         id: playwright-version
         shell: bash
@@ -53,9 +83,6 @@ jobs:
       - name: Install Playwright Browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install webkit --with-deps
-
-      - name: Build packages and examples
-        run: pnpm -r build
 
       - name: Run tests
         run: pnpm test
