@@ -28,6 +28,24 @@ test.describe('production-only example', () => {
 			const logFound = await waitForLogMessage(server.logs, 'Something was logged', 10000);
 
 			expect(logFound).toBe(true);
+
+			// Test navigation to second route
+			const secondRouteLink = page.getByRole('link', { name: 'Go to Second Route' });
+			await expect(secondRouteLink).toBeVisible();
+			await secondRouteLink.click();
+
+			// Verify we're on the second route
+			await page.waitForURL('**/second-route');
+			await expect(page.getByRole('heading', { name: 'Second Route' })).toBeVisible();
+
+			// Navigate back to home
+			const homeLink = page.getByRole('link', { name: 'Home' });
+			await expect(homeLink).toBeVisible();
+			await homeLink.click();
+
+			// Verify we're back on the home page
+			await page.waitForURL('**/');
+			await expect(page.getByRole('heading', { name: 'Hello World' })).toBeVisible();
 		} finally {
 			// Cleanup: kill the server
 			if (server) {
@@ -85,6 +103,24 @@ test.describe('production-only example', () => {
 			const logFound = await waitForLogMessage(server.logs, 'Something was logged', 10000);
 
 			expect(logFound).toBe(true);
+
+			// Test navigation to second route
+			const secondRouteLink = page.getByRole('link', { name: 'Go to Second Route' });
+			await expect(secondRouteLink).toBeVisible();
+			await secondRouteLink.click();
+
+			// Verify we're on the second route
+			await page.waitForURL('**/second-route');
+			await expect(page.getByRole('heading', { name: 'Second Route' })).toBeVisible();
+
+			// Navigate back to home
+			const homeLink = page.getByRole('link', { name: 'Home' });
+			await expect(homeLink).toBeVisible();
+			await homeLink.click();
+
+			// Verify we're back on the home page
+			await page.waitForURL('**/');
+			await expect(page.getByRole('heading', { name: 'Hello World' })).toBeVisible();
 		} finally {
 			// Cleanup: kill the server
 			if (server) {

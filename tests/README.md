@@ -38,12 +38,24 @@ pnpm test --headed
 Each example app is tested in both development and production modes:
 
 ### production-only
-- **Dev mode**: Starts with `vite dev`, verifies button click logs to server
-- **Production mode**: Builds with `vite build`, starts Fastify server, verifies button click logs to server
+- **Dev mode**: Starts with `vite dev`, then:
+  - Verifies button click logs to server
+  - Tests navigation to second route
+  - Tests navigation back to home
+- **Production mode**: Builds with `vite build`, starts Fastify server, then:
+  - Verifies button click logs to server
+  - Tests navigation to second route
+  - Tests navigation back to home
 
 ### dev-and-prod
-- **Dev mode**: Starts Fastify with dev plugin, verifies button click logs to server
-- **Production mode**: Builds with `vite build`, starts Fastify in prod mode, verifies button click logs to server
+- **Dev mode**: Starts Fastify with dev plugin, then:
+  - Verifies button click logs to server
+  - Tests navigation to second route
+  - Tests navigation back to home
+- **Production mode**: Builds with `vite build`, starts Fastify in prod mode, then:
+  - Verifies button click logs to server
+  - Tests navigation to second route
+  - Tests navigation back to home
 
 ## Test Structure
 

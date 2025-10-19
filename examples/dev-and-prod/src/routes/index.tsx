@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 
 const logSomethingOnServer = createServerFn().handler(() => {
@@ -16,6 +16,9 @@ function App() {
 			<button type="button" onClick={() => logSomethingOnServer()}>
 				Log Something
 			</button>
+			<p>
+				<Link to="/second-route">Go to Second Route</Link>
+			</p>
 		</div>
 	);
 }
