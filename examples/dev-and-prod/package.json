@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node fastify-server.ts --dev",
     "build": "vite build",
-    "start:prod": "pnpm build && node fastify-server.ts"
+    "start": "pnpm build && node fastify-server.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.133.13",
