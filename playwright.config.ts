@@ -13,8 +13,8 @@ export default defineConfig({
 	},
 	projects: [
 		{
-			name: 'chromium',
-			use: { ...devices['Desktop Chrome'] },
+			name: 'webkit',
+			use: { ...devices['Desktop Safari'] },
 		},
 	],
 	timeout: 120000, // 2 minutes (includes build time for production tests)

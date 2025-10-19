@@ -7,10 +7,10 @@ End-to-end tests for the example applications using Playwright.
 **First time only:** Install Playwright browsers
 
 ```bash
-pnpm exec playwright install chromium
+pnpm exec playwright install webkit
 ```
 
-This downloads the Chromium browser that Playwright uses for testing (~130MB).
+This downloads the WebKit browser that Playwright uses for testing. WebKit is the smallest and fastest to install, plus we are not testing any fancy browser behavior so it is sufficient for this plugin.
 
 ## Running Tests
 
@@ -80,6 +80,6 @@ See `playwright.config.ts` in the root directory for test configuration.
 Key settings:
 - Tests run sequentially to avoid port conflicts
 - 2 minute timeout per test (accounts for build time)
-- Only tests Chromium browser
+- Only tests WebKit browser because there's not a lot of browser logic to test
 - Reports generated in `playwright-report/`
 

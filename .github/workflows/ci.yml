@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '^22.18'
+          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -45,6 +46,7 @@ jobs:
   test:
     name: E2E Tests
     runs-on: ubuntu-latest
+    needs: format
     
     steps:
       - name: Checkout code
@@ -54,6 +56,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '^22.18'
+          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -74,8 +77,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install chromium --with-deps
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          # This is the directory where Playwright stores its browser binaries.
+          path: ~/.cache/ms-playwright
+          # The key is crucial for cache invalidation.
+          # It includes the runner's OS and a hash of the pnpm lockfile.
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install webkit --with-deps
 
       - name: Run tests
         run: pnpm test
