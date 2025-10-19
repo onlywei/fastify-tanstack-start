@@ -1,3 +1,4 @@
+/// <reference types="@fastify/middie" />
 import middie from '@fastify/middie';
 import type { FastifyContentTypeParser, FastifyInstance, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
