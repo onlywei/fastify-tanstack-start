@@ -33,6 +33,11 @@ jobs:
       - name: Setup pnpm Environment
         uses: ./.github/actions/setup-pnpm
 
+      - name: Get Playwright version
+        id: playwright-version
+        shell: bash
+        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('@playwright/test/package.json').version)")" >> "$GITHUB_ENV"
+
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         id: playwright-cache
@@ -40,8 +45,8 @@ jobs:
           # This is the directory where Playwright stores its browser binaries.
           path: ~/.cache/ms-playwright
           # The key is crucial for cache invalidation.
-          # It includes the runner's OS and a hash of the pnpm lockfile.
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          # It includes the runner's OS and the Playwright version.
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
           restore-keys: |
             ${{ runner.os }}-playwright-
 
