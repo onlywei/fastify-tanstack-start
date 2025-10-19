@@ -41,7 +41,7 @@ jobs:
           path: ~/.cache/ms-playwright
           # The key is crucial for cache invalidation.
           # It includes the runner's OS and a hash of the pnpm lockfile.
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
 
