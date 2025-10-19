@@ -1,3 +1,4 @@
+import type {} from '@fastify/middie'; // Ensure FastifyInstance augmentation is available
 import middie from '@fastify/middie';
 import type { FastifyContentTypeParser, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
