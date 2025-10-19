@@ -48,14 +48,14 @@ jobs:
           # This is the directory where Playwright stores its browser binaries.
           path: ~/.cache/ms-playwright
           # The key is crucial for cache invalidation.
-          # It includes the runner's OS and the Playwright version.
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+          # It includes the runner's OS, browser name, and Playwright version.
+          key: ${{ runner.os }}-playwright-chromium-${{ env.PLAYWRIGHT_VERSION }}
           restore-keys: |
-            ${{ runner.os }}-playwright-
+            ${{ runner.os }}-playwright-chromium-
 
       - name: Install Playwright Browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install webkit --with-deps
+        run: pnpm exec playwright install chromium --with-deps
 
       - name: Run tests
         run: pnpm test

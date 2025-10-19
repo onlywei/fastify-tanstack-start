@@ -52,7 +52,7 @@ The repository includes end-to-end tests that verify both examples work correctl
 **First-time setup:**
 ```bash
 # Install Playwright browsers (only needed once)
-pnpm exec playwright install webkit
+pnpm exec playwright install chromium
 ```
 
 **Running tests:**
