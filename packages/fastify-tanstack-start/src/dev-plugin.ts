@@ -1,6 +1,5 @@
-import type {} from '@fastify/middie'; // Ensure FastifyInstance augmentation is available
 import middie from '@fastify/middie';
-import type { FastifyContentTypeParser, FastifyPluginAsync } from 'fastify';
+import type { FastifyContentTypeParser, FastifyInstance, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { toNodeHandler } from 'srvx/node';
 import type { ViteDevServer } from 'vite';
@@ -39,7 +38,7 @@ const tanstackStartDevServer: FastifyPluginAsync<FastifyTanstackStartDevServerOp
 
 	// Register all routes with the specified prefix
 	await fastify.register(
-		async (app) => {
+		async (app: FastifyInstance) => {
 			// Register middie to support Connect/Express style middlewares
 			await app.register(middie);
 
