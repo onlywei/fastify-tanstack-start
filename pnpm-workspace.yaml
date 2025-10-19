@@ -7,7 +7,3 @@ catalog:
   typescript: ^5.9.3
   fastify: ^5.6.1
   vite: ^7.1.10
-
-hoist: false
-
-hoistWorkspacePackages: false
