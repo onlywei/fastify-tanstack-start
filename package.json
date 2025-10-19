@@ -8,9 +8,15 @@
     "build": "pnpm -r --filter './packages/**' build",
     "check-format": "biome check .",
     "format": "biome check --write .",
-    "clean": "pnpm -r exec rm -rf dist node_modules"
+    "clean": "pnpm -r exec rm -rf dist node_modules",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.6"
+    "@biomejs/biome": "2.2.6",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.7.2",
+    "typescript": "^5.9.3"
   }
 }

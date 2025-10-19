@@ -32,6 +32,9 @@ pnpm install
 # Build the plugin package
 pnpm build
 
+# Run E2E tests
+pnpm test
+
 # Format code
 pnpm format
 
@@ -41,6 +44,30 @@ pnpm check-format
 # Clean all build artifacts and node_modules
 pnpm clean
 ```
+
+### Running Tests
+
+The repository includes end-to-end tests that verify both examples work correctly in dev and production modes.
+
+**First-time setup:**
+```bash
+# Install Playwright browsers (only needed once)
+pnpm exec playwright install chromium
+```
+
+**Running tests:**
+```bash
+# Run all tests
+pnpm test
+
+# Run with UI (great for debugging)
+pnpm test:ui
+
+# Run in debug mode
+pnpm test:debug
+```
+
+See [`tests/README.md`](./tests/README.md) for more details.
 
 ### Working on the Plugin
 
