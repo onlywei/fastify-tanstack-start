@@ -16,16 +16,6 @@ export function startServer(command: string, args: string[], cwd: string): Serve
 		detached: true, // Create a new process group so we can kill all child processes
 	});
 
-	// Log server output in CI to help debug failures
-	if (process.env.CI) {
-		serverProcess.stdout?.on('data', (data) => {
-			console.log(`[SERVER OUT] ${data.toString().trim()}`);
-		});
-		serverProcess.stderr?.on('data', (data) => {
-			console.error(`[SERVER ERR] ${data.toString().trim()}`);
-		});
-	}
-
 	serverProcess.on('error', (error) => {
 		console.error('Failed to start server:', error);
 	});
