@@ -24,11 +24,16 @@ import { tanstackStartProduction } from 'fastify-tanstack-start';
 
 const fastify = Fastify({/* options */});
 
-// Register the plugin 
+// Register the plugin with default options
+// This assumes you run the server from your project directory
+fastify.register(tanstackStartProduction);
+
+// Or customize the options:
 fastify.register(tanstackStartProduction, {
-	basePath: '/your/app', // must match the "base" config in your vite config
-	builtServerModule: './dist/server/server.js', // module produced by "vite build"
-	builtClientAssetsDir: './dist/client/assets',
+	basePath: '/your/app', // defaults to '/'
+	rootDir: import.meta.dirname, // defaults to process.cwd() - use import.meta.dirname to run from any directory
+	builtServerModule: './dist/server/server.js', // defaults to './dist/server/server.js'
+	builtClientAssetsDir: './dist/client/assets', // defaults to './dist/client/assets'
 });
 
 try {
@@ -40,7 +45,14 @@ try {
 
 ```
 
-Be sure to inspect your `dist/` directory after running `vite build` to get the correct values for the `builtServerModule` and `builtClientAssetsDir` paths.
+#### Plugin Options
+
+- **`basePath`** (optional, default: `'/'`): Base path for your app (e.g., `'/app'` or `'/my/special-path'`). Must match the `base` config in your Vite config.
+- **`rootDir`** (optional, default: `process.cwd()`): Root directory for resolving relative paths. Use `import.meta.dirname` to make your server runnable from any working directory.
+- **`builtServerModule`** (optional, default: `'./dist/server/server.js'`): Path to the server entry point that was built by `vite build`. Can be absolute or relative to `rootDir`.
+- **`builtClientAssetsDir`** (optional, default: `'./dist/client/assets'`): Path to the client assets directory. Can be absolute or relative to `rootDir`.
+
+Be sure to inspect your `dist/` directory after running `vite build` to verify the correct paths for your setup.
 
 After that, you should be able run the following to start your application in production mode:
 
@@ -64,11 +76,12 @@ const fastify = Fastify({/* options */});
 // It can be an environment variable, a CLI argument, or whatever you want.
 if (DEVELOPMENT) {
 	fastify.register(tanstackStartDevServer, {
-		// options
+		rootDir: import.meta.dirname, // recommended for running from any directory
 	});
 } else {
-	// Now use the production mode plugin, see above for details
-	fastify.register(tanstackStartProduction, {/* options */});
+	fastify.register(tanstackStartProduction, {
+		rootDir: import.meta.dirname,
+	});
 }
 
 try {
@@ -78,3 +91,10 @@ try {
 	process.exit(1);
 }
 ```
+
+#### Development Server Options
+
+- **`basePath`** (optional, default: `'/'`): Base path for your app.
+- **`rootDir`** (optional, default: `process.cwd()`): Root directory for resolving relative paths. Use `import.meta.dirname` to make your server runnable from any working directory.
+- **`serverEntry`** (optional, default: `'./src/server.ts'`): Path to the server entry point for development. Can be absolute or relative to `rootDir`.
+- **`viteConfig`** (optional): Additional Vite dev server configuration options.

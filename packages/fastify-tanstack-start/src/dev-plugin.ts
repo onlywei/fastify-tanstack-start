@@ -1,4 +1,4 @@
-/// <reference types="@fastify/middie" />
+import { resolve } from 'node:path';
 import middie from '@fastify/middie';
 import type { FastifyContentTypeParser, FastifyInstance, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
@@ -13,7 +13,15 @@ export interface FastifyTanstackStartDevServerOptions {
 	basePath?: string;
 
 	/**
+	 * Root directory for resolving relative paths.
+	 * Use `import.meta.dirname` to make the server runnable from any working directory.
+	 * @default process.cwd()
+	 */
+	rootDir?: string;
+
+	/**
 	 * Path to the server entry point for development
+	 * Can be absolute or relative to rootDir
 	 * @default './src/server.ts'
 	 */
 	serverEntry?: string;
@@ -28,11 +36,17 @@ const tanstackStartDevServer: FastifyPluginAsync<FastifyTanstackStartDevServerOp
 	fastify,
 	options,
 ) => {
-	const { basePath = '/', serverEntry = './src/server.ts', viteConfig = {} } = options;
+	const {
+		basePath = '/',
+		rootDir = process.cwd(),
+		serverEntry = resolve(rootDir, 'src', 'server.ts'),
+		viteConfig = {},
+	} = options;
 
 	// Create Vite dev server in middleware mode
 	const vite = await import('vite');
 	const viteDevServer: ViteDevServer = await vite.createServer({
+		root: rootDir,
 		server: { middlewareMode: true },
 		...viteConfig,
 	});

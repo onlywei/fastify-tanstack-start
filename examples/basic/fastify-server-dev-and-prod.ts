@@ -1,4 +1,3 @@
-import { resolve } from 'node:path';
 import Fastify from 'fastify';
 import { tanstackStartDevServer, tanstackStartProduction } from 'fastify-tanstack-start';
 
@@ -9,14 +8,11 @@ const fastify = Fastify({
 
 if (process.argv.includes('--dev')) {
 	fastify.register(tanstackStartDevServer, {
-		basePath: '/',
-		serverEntry: resolve(import.meta.dirname, 'src', 'server.ts'),
+		rootDir: import.meta.dirname,
 	});
 } else {
 	fastify.register(tanstackStartProduction, {
-		basePath: '/',
-		builtServerModule: resolve(import.meta.dirname, 'dist', 'server', 'server.js'),
-		builtClientAssetsDir: resolve(import.meta.dirname, 'dist', 'client', 'assets'),
+		rootDir: import.meta.dirname,
 	});
 }
 

@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import fastifyStatic from '@fastify/static';
 import type { FastifyContentTypeParser, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
@@ -11,13 +12,22 @@ export interface FastifyTanstackStartProductionOptions {
 	basePath?: string;
 
 	/**
+	 * Root directory for resolving relative paths.
+	 * Use `import.meta.dirname` to make the server runnable from any working directory.
+	 * @default process.cwd()
+	 */
+	rootDir?: string;
+
+	/**
 	 * Path to the server entry point that was built by "vite build"
+	 * Can be absolute or relative to rootDir
 	 * @default './dist/server/server.js'
 	 */
 	builtServerModule?: string;
 
 	/**
 	 * Path to the client assets directory
+	 * Can be absolute or relative to rootDir
 	 * @default './dist/client/assets'
 	 */
 	builtClientAssetsDir?: string;
@@ -29,12 +39,13 @@ const tanstackStartProduction: FastifyPluginAsync<FastifyTanstackStartProduction
 ) => {
 	const {
 		basePath = '/',
-		builtServerModule: serverEntry = './dist/server/server.js',
-		builtClientAssetsDir: clientAssets = './dist/client/assets',
+		rootDir = process.cwd(),
+		builtServerModule = resolve(rootDir, 'dist', 'server', 'server.js'),
+		builtClientAssetsDir = resolve(rootDir, 'dist', 'client', 'assets'),
 	} = options;
 
 	// Import the TanStack Start server handler
-	const { default: handler } = await import(serverEntry);
+	const { default: handler } = await import(builtServerModule);
 	const nodeHandler = toNodeHandler(handler.fetch);
 
 	// Register all routes with the specified prefix
@@ -42,7 +53,7 @@ const tanstackStartProduction: FastifyPluginAsync<FastifyTanstackStartProduction
 		async (app) => {
 			// Serve static assets from the directory that Vite builds with the Tanstack Start plugin
 			await app.register(fastifyStatic, {
-				root: clientAssets,
+				root: builtClientAssetsDir,
 				prefix: '/assets',
 			});
 
