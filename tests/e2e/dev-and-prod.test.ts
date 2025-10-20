@@ -59,7 +59,7 @@ test.describe('basic example - dev-and-prod mode', () => {
 
 		try {
 			// Start the production Fastify server
-			server = startServer('node', ['fastify-server-dev-and-prod.ts'], 'examples/basic');
+			server = startServer('node', ['fastify-server--dev-and-prod.ts'], 'examples/basic');
 
 			// Wait for server to be ready
 			await waitForServer('http://localhost:3000', 30000);

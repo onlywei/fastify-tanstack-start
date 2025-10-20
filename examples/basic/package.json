@@ -3,11 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev:dev-and-prod": "node fastify-server-dev-and-prod.ts --dev",
+    "dev:dev-and-prod": "node fastify-server--dev-and-prod.ts --dev",
     "dev:prod-only": "vite dev",
     "build": "vite build",
-    "start:dev-and-prod": "pnpm build && node fastify-server-dev-and-prod.ts",
-    "start:prod-only": "pnpm build && node fastify-server-prod-only.ts"
+    "start:dev-and-prod": "pnpm build && node fastify-server--dev-and-prod.ts",
+    "start:prod-only": "pnpm build && node fastify-server--prod-only.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.133.13",

@@ -12,14 +12,14 @@ This example demonstrates both approaches for using the `fastify-tanstack-start`
 Uses Fastify with different plugins for both environments:
 - **Development**: `tanstackStartDevServer` plugin (Vite middleware mode)
 - **Production**: `tanstackStartProduction` plugin
-- **Server File**: `fastify-server-dev-and-prod.ts`
+- **Server File**: `fastify-server--dev-and-prod.ts`
 
 ### Approach 2: Production-Only Mode
 
 Uses different servers for each environment:
 - **Development**: Standard Vite dev server (`vite dev`)
 - **Production**: Fastify with `tanstackStartProduction` plugin
-- **Server File**: `fastify-server-prod-only.ts`
+- **Server File**: `fastify-server--prod-only.ts`
 
 ## 🚀 Getting Started
 
@@ -64,7 +64,7 @@ Then open your browser to **http://localhost:3000**
 
 ### How It Works
 
-The `fastify-server-dev-and-prod.ts` file checks for the `--dev` flag:
+The `fastify-server--dev-and-prod.ts` file checks for the `--dev` flag:
 
 ```ts
 if (process.argv.includes('--dev')) {
@@ -117,13 +117,13 @@ pnpm start:prod-only
 
 This command:
 1. Runs `vite build` to generate production assets in `dist/`
-2. Starts the Fastify server defined in `fastify-server-prod-only.ts`
+2. Starts the Fastify server defined in `fastify-server--prod-only.ts`
 
 Then open your browser to **http://localhost:3000**
 
 ### How It Works
 
-The `fastify-server-prod-only.ts` file uses the `tanstackStartProduction` plugin to:
+The `fastify-server--prod-only.ts` file uses the `tanstackStartProduction` plugin to:
 1. Serve static client assets from `dist/client/assets/`
 2. Handle server-side rendering via the built server module at `dist/server/server.js`
 3. Route all requests through TanStack Start's request handler
@@ -143,8 +143,8 @@ This approach gives you:
 
 ## 📁 Key Files
 
-- **`fastify-server-dev-and-prod.ts`** - Fastify server for both dev and prod (Approach 1)
-- **`fastify-server-prod-only.ts`** - Fastify production-only server (Approach 2)
+- **`fastify-server--dev-and-prod.ts`** - Fastify server for both dev and prod (Approach 1)
+- **`fastify-server--prod-only.ts`** - Fastify production-only server (Approach 2)
 - **`vite.config.ts`** - Vite/TanStack Start configuration
 - **`src/routes/`** - Your TanStack Start route components
 - **`package.json`** - Scripts for both approaches
@@ -161,10 +161,10 @@ Then start either Fastify server manually:
 
 ```bash
 # For dev-and-prod approach
-node fastify-server-dev-and-prod.ts
+node fastify-server--dev-and-prod.ts
 
 # For prod-only approach
-node fastify-server-prod-only.ts
+node fastify-server--prod-only.ts
 ```
 
 ## 🎯 Choosing the Right Approach
