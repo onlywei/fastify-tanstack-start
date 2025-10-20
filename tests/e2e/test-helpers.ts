@@ -39,7 +39,9 @@ export function startServer(command: string, args: string[], cwd: string): Serve
 			// Set up exit handler
 			const onExit = () => {
 				clearTimeout(forceKillTimeout);
-				resolve();
+				// Wait for port to be fully released before resolving
+				// This is critical in CI where port cleanup is slower
+				setTimeout(() => resolve(), 1000);
 			};
 
 			serverProcess.once('exit', onExit);
