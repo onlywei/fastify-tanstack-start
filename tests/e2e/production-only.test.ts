@@ -2,13 +2,13 @@ import { expect, test } from '@playwright/test';
 import type { ServerInstance } from './test-helpers.ts';
 import { startServer, waitForServer } from './test-helpers.ts';
 
-test.describe('production-only example', () => {
+test.describe('basic example - prod-only mode', () => {
 	test('dev mode - button click logs to server', async ({ page }) => {
 		let server: ServerInstance | null = null;
 
 		try {
 			// Start the Vite dev server
-			server = startServer('pnpm', ['dev'], 'examples/production-only');
+			server = startServer('pnpm', ['dev:prod-only'], 'examples/basic');
 
 			// Wait for server to be ready
 			await waitForServer('http://localhost:3000', 60000);
@@ -59,7 +59,7 @@ test.describe('production-only example', () => {
 
 		try {
 			// Start the production Fastify server
-			server = startServer('node', ['fastify-server.ts'], 'examples/production-only');
+			server = startServer('node', ['fastify-server-prod-only.ts'], 'examples/basic');
 
 			// Wait for server to be ready
 			await waitForServer('http://localhost:3000', 30000);

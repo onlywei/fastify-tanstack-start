@@ -2,13 +2,13 @@ import { expect, test } from '@playwright/test';
 import type { ServerInstance } from './test-helpers.ts';
 import { startServer, waitForServer } from './test-helpers.ts';
 
-test.describe('dev-and-prod example', () => {
+test.describe('basic example - dev-and-prod mode', () => {
 	test('dev mode - button click logs to server', async ({ page }) => {
 		let server: ServerInstance | null = null;
 
 		try {
 			// Start the Fastify dev server (with Vite middleware)
-			server = startServer('pnpm', ['dev'], 'examples/dev-and-prod');
+			server = startServer('pnpm', ['dev:dev-and-prod'], 'examples/basic');
 
 			// Wait for server to be ready
 			await waitForServer('http://localhost:3000', 60000);
@@ -59,7 +59,7 @@ test.describe('dev-and-prod example', () => {
 
 		try {
 			// Start the production Fastify server
-			server = startServer('node', ['fastify-server.ts'], 'examples/dev-and-prod');
+			server = startServer('node', ['fastify-server-dev-and-prod.ts'], 'examples/basic');
 
 			// Wait for server to be ready
 			await waitForServer('http://localhost:3000', 30000);

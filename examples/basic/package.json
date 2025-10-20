@@ -1,11 +1,13 @@
 {
-  "name": "dev-and-prod",
+  "name": "basic",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node fastify-server.ts --dev",
+    "dev:dev-and-prod": "node fastify-server-dev-and-prod.ts --dev",
+    "dev:prod-only": "vite dev",
     "build": "vite build",
-    "start": "pnpm build && node fastify-server.ts"
+    "start:dev-and-prod": "pnpm build && node fastify-server-dev-and-prod.ts",
+    "start:prod-only": "pnpm build && node fastify-server-prod-only.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.133.13",
@@ -25,3 +27,4 @@
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
+
