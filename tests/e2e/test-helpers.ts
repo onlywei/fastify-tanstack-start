@@ -13,6 +13,7 @@ export function startServer(command: string, args: string[], cwd: string): Serve
 	const serverProcess = spawn(command, args, {
 		cwd: resolve(process.cwd(), cwd),
 		env: { ...process.env },
+		detached: true, // Create a new process group so we can kill all child processes
 	});
 
 	// Log server output in CI to help debug failures
@@ -39,9 +40,19 @@ export function startServer(command: string, args: string[], cwd: string): Serve
 			// Set up exit handler
 			const onExit = () => {
 				clearTimeout(forceKillTimeout);
-				// Wait for port to be fully released before resolving
-				// This is critical in CI where port cleanup is slower
-				setTimeout(() => resolve(), 1000);
+
+				// Kill the entire process group to ensure child processes (like Vite) are cleaned up
+				// This is critical for dev servers that spawn additional processes
+				if (serverProcess.pid) {
+					try {
+						// On Unix, kill negative PID to kill the entire process group
+						process.kill(-serverProcess.pid, 'SIGKILL');
+					} catch (e) {
+						// Process group might already be gone, that's okay
+					}
+				}
+
+				resolve();
 			};
 
 			serverProcess.once('exit', onExit);
