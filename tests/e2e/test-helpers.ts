@@ -15,6 +15,16 @@ export function startServer(command: string, args: string[], cwd: string): Serve
 		env: { ...process.env },
 	});
 
+	// Log server output in CI to help debug failures
+	if (process.env.CI) {
+		serverProcess.stdout?.on('data', (data) => {
+			console.log(`[SERVER OUT] ${data.toString().trim()}`);
+		});
+		serverProcess.stderr?.on('data', (data) => {
+			console.error(`[SERVER ERR] ${data.toString().trim()}`);
+		});
+	}
+
 	serverProcess.on('error', (error) => {
 		console.error('Failed to start server:', error);
 	});
@@ -27,11 +37,8 @@ export function startServer(command: string, args: string[], cwd: string): Serve
 			}
 
 			// Set up exit handler
-			const onExit = async () => {
+			const onExit = () => {
 				clearTimeout(forceKillTimeout);
-				// Wait a bit to ensure the port is fully released
-				// This prevents "port in use" errors in CI when tests run sequentially
-				await new Promise((r) => setTimeout(r, 500));
 				resolve();
 			};
 
@@ -65,8 +72,7 @@ export async function waitForServer(url: string, timeoutMs = 30000): Promise<voi
 		try {
 			const response = await fetch(url);
 			if (response.ok || response.status === 404) {
-				// Server is responding - give it a moment to fully stabilize
-				await new Promise((resolve) => setTimeout(resolve, 1000));
+				// Server is responding
 				return;
 			}
 		} catch {
