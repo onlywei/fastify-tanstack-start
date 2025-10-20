@@ -7,8 +7,9 @@
   "scripts": {
     "build": "pnpm -r --filter './packages/**' build",
     "check-format": "biome check .",
-    "format": "biome check --write .",
     "clean": "pnpm -r exec rm -rf dist node_modules",
+    "format": "biome check --write .",
+    "local-release": "changeset version && changeset publish",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug"
