@@ -27,8 +27,11 @@ export function startServer(command: string, args: string[], cwd: string): Serve
 			}
 
 			// Set up exit handler
-			const onExit = () => {
+			const onExit = async () => {
 				clearTimeout(forceKillTimeout);
+				// Wait a bit to ensure the port is fully released
+				// This prevents "port in use" errors in CI when tests run sequentially
+				await new Promise((r) => setTimeout(r, 500));
 				resolve();
 			};
 
@@ -60,16 +63,16 @@ export async function waitForServer(url: string, timeoutMs = 30000): Promise<voi
 
 	while (Date.now() - startTime < timeoutMs) {
 		try {
-			const response = await fetch(url, { method: 'HEAD' });
+			const response = await fetch(url);
 			if (response.ok || response.status === 404) {
-				// Server is responding (404 is fine, means server is up)
+				// Server is responding - give it a moment to fully stabilize
+				await new Promise((resolve) => setTimeout(resolve, 1000));
 				return;
 			}
 		} catch {
 			// Server not ready yet, continue polling
 		}
 
-		// Wait 100ms before trying again
 		await new Promise((resolve) => setTimeout(resolve, 100));
 	}
 
