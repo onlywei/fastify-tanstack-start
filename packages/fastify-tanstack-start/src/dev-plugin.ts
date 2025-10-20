@@ -1,6 +1,11 @@
 import { resolve } from 'node:path';
 import middie from '@fastify/middie';
-import type { FastifyContentTypeParser, FastifyInstance, FastifyPluginAsync } from 'fastify';
+import type {
+	FastifyContentTypeParser,
+	FastifyInstance,
+	FastifyPluginAsync,
+	RouteHandler,
+} from 'fastify';
 import fp from 'fastify-plugin';
 import { toNodeHandler } from 'srvx/node';
 import type { ViteDevServer } from 'vite';
@@ -47,6 +52,7 @@ const tanstackStartDevServer: FastifyPluginAsync<FastifyTanstackStartDevServerOp
 	const vite = await import('vite');
 	const viteDevServer: ViteDevServer = await vite.createServer({
 		root: rootDir,
+		base: basePath,
 		server: { middlewareMode: true },
 		...viteConfig,
 	});
@@ -69,8 +75,7 @@ const tanstackStartDevServer: FastifyPluginAsync<FastifyTanstackStartDevServerOp
 			app.addContentTypeParser('application/json', noOpParser);
 			app.addContentTypeParser('application/x-www-form-urlencoded', noOpParser);
 
-			// Catch-all route for TanStack Start
-			app.all('/*', async (request, reply) => {
+			const handler: RouteHandler = async (request, reply) => {
 				// If a response was already sent (e.g., by Vite middlewares), don't handle it
 				if (reply.sent) {
 					return;
@@ -91,7 +96,12 @@ const tanstackStartDevServer: FastifyPluginAsync<FastifyTanstackStartDevServerOp
 					}
 					throw error;
 				}
-			});
+			};
+
+			// Catch-all routes for TanStack Start
+			// We need both '/' and '/*' to match the prefix path itself and all subpaths
+			app.all('/', handler);
+			app.all('/*', handler);
 		},
 		{ prefix: basePath },
 	);

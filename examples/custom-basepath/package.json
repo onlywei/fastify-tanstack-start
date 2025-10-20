@@ -1,0 +1,30 @@
+{
+  "name": "basic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:dev-and-prod": "node fastify-server--dev-and-prod.ts --dev",
+    "dev:prod-only": "vite dev",
+    "build": "vite build",
+    "start:dev-and-prod": "pnpm build && node fastify-server--dev-and-prod.ts",
+    "start:prod-only": "pnpm build && node fastify-server--prod-only.ts"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "^1.133.13",
+    "@tanstack/react-start": "^1.133.13",
+    "fastify": "catalog:",
+    "fastify-tanstack-start": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}
+

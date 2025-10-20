@@ -37,7 +37,9 @@ pnpm test --headed
 
 Each example app is tested in both development and production modes:
 
-### production-only
+### Basic Example
+
+#### production-only
 - **Dev mode**: Starts with `vite dev`, then:
   - Verifies button click logs to server
   - Tests navigation to second route
@@ -47,7 +49,7 @@ Each example app is tested in both development and production modes:
   - Tests navigation to second route
   - Tests navigation back to home
 
-### dev-and-prod
+#### dev-and-prod
 - **Dev mode**: Starts Fastify with dev plugin, then:
   - Verifies button click logs to server
   - Tests navigation to second route
@@ -57,12 +59,26 @@ Each example app is tested in both development and production modes:
   - Tests navigation to second route
   - Tests navigation back to home
 
+### Custom Basepath Example
+
+The custom basepath example tests the same functionality as the basic example, but with the app served at `/my/special/path` instead of at the root.
+
+#### production-only
+- **Dev mode**: Starts with `vite dev`, verifies app works at `/my/special/path`
+- **Production mode**: Starts Fastify server, verifies app works at `/my/special/path`
+
+#### dev-and-prod
+- **Dev mode**: Starts Fastify with dev plugin, verifies app works at `/my/special/path`
+- **Production mode**: Starts Fastify in prod mode, verifies app works at `/my/special/path`
+
 ## Test Structure
 
 - `e2e/` - Test files
-  - `production-only.test.ts` - Tests for production-only example
-  - `dev-and-prod.test.ts` - Tests for dev-and-prod example
-  - `test-helpers.ts` - Shared utilities for starting servers and capturing logs
+  - `production-only.test.ts` - Tests for basic example (production-only mode)
+  - `dev-and-prod.test.ts` - Tests for basic example (dev-and-prod mode)
+  - `custom-basepath-production-only.test.ts` - Tests for custom-basepath example (production-only mode)
+  - `custom-basepath-dev-and-prod.test.ts` - Tests for custom-basepath example (dev-and-prod mode)
+  - `test-helpers.ts` - Shared utilities for starting servers and waiting for them to be ready
 
 ## How It Works
 

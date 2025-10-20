@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 import fastifyStatic from '@fastify/static';
-import type { FastifyContentTypeParser, FastifyPluginAsync } from 'fastify';
+import type { FastifyContentTypeParser, FastifyPluginAsync, RouteHandler } from 'fastify';
 import fp from 'fastify-plugin';
 import { toNodeHandler } from 'srvx/node';
 
@@ -66,8 +66,7 @@ const tanstackStartProduction: FastifyPluginAsync<FastifyTanstackStartProduction
 			app.addContentTypeParser('application/json', noOpParser);
 			app.addContentTypeParser('application/x-www-form-urlencoded', noOpParser);
 
-			// Catch-all route for TanStack Start
-			app.all('/*', async (request, reply) => {
+			const handler: RouteHandler = async (request, reply) => {
 				// If static files already sent a response, don't handle it
 				if (reply.sent) {
 					return;
@@ -76,7 +75,12 @@ const tanstackStartProduction: FastifyPluginAsync<FastifyTanstackStartProduction
 				// Hijack the response to give full control to srvx/TanStack Start
 				reply.hijack();
 				await nodeHandler(request.raw, reply.raw);
-			});
+			};
+
+			// Catch-all routes for TanStack Start
+			// We need both '/' and '/*' to match the prefix path itself and all subpaths
+			app.all('/', handler);
+			app.all('/*', handler);
 		},
 		{ prefix: basePath },
 	);
