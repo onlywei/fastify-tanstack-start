@@ -14,7 +14,7 @@ fastify.register(tanstackStartProduction, {
 
 try {
 	await fastify.listen({
-		port: 3000,
+		port: 3001,
 	});
 } catch (err) {
 	fastify.log.error(err);

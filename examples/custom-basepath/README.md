@@ -43,7 +43,7 @@ Run the app in development mode using Fastify + Vite middleware:
 pnpm dev:dev-and-prod
 ```
 
-Then open your browser to **http://localhost:3000/my/special/path**
+Then open your browser to **http://localhost:3001/my/special/path**
 
 This mode provides:
 - Hot module replacement (HMR) via Vite
@@ -62,7 +62,7 @@ This command:
 1. Runs `vite build` to generate production assets in `dist/`
 2. Starts the Fastify server in production mode
 
-Then open your browser to **http://localhost:3000/my/special/path**
+Then open your browser to **http://localhost:3001/my/special/path**
 
 ### How It Works
 
@@ -105,7 +105,7 @@ Run the app in development mode using Vite's dev server:
 pnpm dev:prod-only
 ```
 
-Then open your browser to **http://localhost:3000/my/special/path**
+Then open your browser to **http://localhost:3001/my/special/path**
 
 The Vite dev server provides hot module replacement (HMR) and fast refresh during development.
 
@@ -121,7 +121,7 @@ This command:
 1. Runs `vite build` to generate production assets in `dist/`
 2. Starts the Fastify server defined in `fastify-server--prod-only.ts`
 
-Then open your browser to **http://localhost:3000/my/special/path**
+Then open your browser to **http://localhost:3001/my/special/path**
 
 ### How It Works
 

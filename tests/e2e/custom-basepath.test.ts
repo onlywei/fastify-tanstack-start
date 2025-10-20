@@ -12,10 +12,10 @@ test.describe('custom-basepath example', () => {
 				server = startServer('pnpm', ['dev:dev-and-prod'], 'examples/custom-basepath');
 
 				// Wait for server to be ready
-				await waitForServer('http://localhost:3000/my/special/path', 60000);
+				await waitForServer('http://localhost:3001/my/special/path', 60000);
 
 				// Navigate to the app at the custom basepath
-				await page.goto('http://localhost:3000/my/special/path');
+				await page.goto('http://localhost:3001/my/special/path');
 
 				// Wait for the page to be fully loaded
 				await page.waitForLoadState('networkidle');
@@ -67,10 +67,10 @@ test.describe('custom-basepath example', () => {
 				);
 
 				// Wait for server to be ready
-				await waitForServer('http://localhost:3000/my/special/path', 30000);
+				await waitForServer('http://localhost:3001/my/special/path', 30000);
 
 				// Navigate to the app at the custom basepath
-				await page.goto('http://localhost:3000/my/special/path');
+				await page.goto('http://localhost:3001/my/special/path');
 
 				// Wait for the page to be fully loaded
 				await page.waitForLoadState('networkidle');
@@ -120,10 +120,10 @@ test.describe('custom-basepath example', () => {
 				server = startServer('pnpm', ['dev:prod-only'], 'examples/custom-basepath');
 
 				// Wait for server to be ready
-				await waitForServer('http://localhost:3000/my/special/path', 60000);
+				await waitForServer('http://localhost:3001/my/special/path', 60000);
 
 				// Navigate to the app at the custom basepath
-				await page.goto('http://localhost:3000/my/special/path');
+				await page.goto('http://localhost:3001/my/special/path');
 
 				// Wait for the page to be fully loaded
 				await page.waitForLoadState('networkidle');
@@ -171,10 +171,10 @@ test.describe('custom-basepath example', () => {
 				server = startServer('node', ['fastify-server--prod-only.ts'], 'examples/custom-basepath');
 
 				// Wait for server to be ready
-				await waitForServer('http://localhost:3000/my/special/path', 30000);
+				await waitForServer('http://localhost:3001/my/special/path', 30000);
 
 				// Navigate to the app at the custom basepath
-				await page.goto('http://localhost:3000/my/special/path');
+				await page.goto('http://localhost:3001/my/special/path');
 
 				// Wait for the page to be fully loaded
 				await page.waitForLoadState('networkidle');

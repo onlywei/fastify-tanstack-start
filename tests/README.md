@@ -57,7 +57,7 @@ See the test files for detailed test scenarios.
 See `playwright.config.ts` in the root directory for test configuration.
 
 Key settings:
-- Tests run sequentially to avoid port conflicts
+- Tests run in parallel - one worker per example
 - 2 minute timeout per test (accounts for build time)
 - Only tests Chromium browser (more reliable in CI)
 - Reports generated in `playwright-report/`
