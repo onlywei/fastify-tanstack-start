@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
+    "@changesets/cli": "^2.29.7",
     "@playwright/test": "^1.56.1",
     "@types/node": "catalog:",
     "typescript": "catalog:"
