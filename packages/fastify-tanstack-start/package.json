@@ -1,6 +1,6 @@
 {
   "name": "fastify-tanstack-start",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Convenience plugin to serve Tanstack Start apps on a Fastify server",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,9 @@
     }
   },
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=22.18"
   },
