@@ -10,8 +10,6 @@ End-to-end tests for the example applications using Playwright.
 pnpm exec playwright install chromium
 ```
 
-This downloads the Chromium browser that Playwright uses for testing (~130MB). We use Chromium because it's more reliable across different CI environments and has better compatibility than WebKit on Linux.
-
 ## Running Tests
 
 From the monorepo root:
@@ -27,7 +25,8 @@ pnpm test:ui
 pnpm test:debug
 
 # Run specific test file
-pnpm test production-only
+pnpm test basic
+pnpm test custom-basepath
 
 # Run in headed mode (see the browser)
 pnpm test --headed
@@ -35,59 +34,23 @@ pnpm test --headed
 
 ## What Gets Tested
 
-Each example app is tested in both development and production modes:
+Each example is tested with both deployment approaches:
+- **Dev-and-prod mode**: Fastify for both development and production
+- **Prod-only mode**: Vite dev server for development, Fastify for production
 
-### Basic Example
+Tests verify:
+- Server functions execute correctly
+- Client-side navigation works
+- Static assets are served properly
 
-#### production-only
-- **Dev mode**: Starts with `vite dev`, then:
-  - Verifies button click logs to server
-  - Tests navigation to second route
-  - Tests navigation back to home
-- **Production mode**: Builds with `vite build`, starts Fastify server, then:
-  - Verifies button click logs to server
-  - Tests navigation to second route
-  - Tests navigation back to home
-
-#### dev-and-prod
-- **Dev mode**: Starts Fastify with dev plugin, then:
-  - Verifies button click logs to server
-  - Tests navigation to second route
-  - Tests navigation back to home
-- **Production mode**: Builds with `vite build`, starts Fastify in prod mode, then:
-  - Verifies button click logs to server
-  - Tests navigation to second route
-  - Tests navigation back to home
-
-### Custom Basepath Example
-
-The custom basepath example tests the same functionality as the basic example, but with the app served at `/my/special/path` instead of at the root.
-
-#### production-only
-- **Dev mode**: Starts with `vite dev`, verifies app works at `/my/special/path`
-- **Production mode**: Starts Fastify server, verifies app works at `/my/special/path`
-
-#### dev-and-prod
-- **Dev mode**: Starts Fastify with dev plugin, verifies app works at `/my/special/path`
-- **Production mode**: Starts Fastify in prod mode, verifies app works at `/my/special/path`
+See the test files for detailed test scenarios.
 
 ## Test Structure
 
 - `e2e/` - Test files
-  - `production-only.test.ts` - Tests for basic example (production-only mode)
-  - `dev-and-prod.test.ts` - Tests for basic example (dev-and-prod mode)
-  - `custom-basepath-production-only.test.ts` - Tests for custom-basepath example (production-only mode)
-  - `custom-basepath-dev-and-prod.test.ts` - Tests for custom-basepath example (dev-and-prod mode)
+  - `basic.test.ts` - Tests for basic example
+  - `custom-basepath.test.ts` - Tests for custom-basepath example with custom base path
   - `test-helpers.ts` - Shared utilities for starting servers and waiting for them to be ready
-
-## How It Works
-
-1. **Start Server**: Spawns a child process running the server
-2. **Capture Logs**: Collects stdout/stderr from the server process
-3. **Wait for Ready**: Polls the server URL until it responds
-4. **Browser Actions**: Uses Playwright to click the button
-5. **Verify Logs**: Checks that "Something was logged" appears in server output
-6. **Cleanup**: Kills the server process
 
 ## Configuration
 
@@ -96,6 +59,6 @@ See `playwright.config.ts` in the root directory for test configuration.
 Key settings:
 - Tests run sequentially to avoid port conflicts
 - 2 minute timeout per test (accounts for build time)
-- Only tests Chromium browser (more reliable in CI than WebKit)
+- Only tests Chromium browser (more reliable in CI)
 - Reports generated in `playwright-report/`
 
